@@ -2,36 +2,31 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViewsPlus.com | दुनिया की धड़कन</title>
+    <title>ViewsPlus.com</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* पॉपअप स्टाइल */
-        #login-modal { display:none; position:fixed; top:30%; left:10%; width:80%; background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px #000; z-index:1000; text-align:center; }
-        .post-actions { display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #ddd; }
-        .action-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-    </style>
 </head>
 <body>
 
-<header class="header-top">
-    <div class="logo-text">ViewsPlus.com</div>
-    <div class="three-dots">⋮</div>
+<header class="header">
+    <div class="logo"><b>ViewsPlus.com</b></div>
+    <div onclick="document.getElementById('menu').style.display='block'" style="cursor:pointer; font-size:24px;">⋮</div>
 </header>
 
+<div id="menu" style="display:none; position:absolute; right:10px; background:white; padding:10px; border:1px solid #ccc;">
+    <div onclick="login()">Google लॉगिन</div>
+    <hr>
+    <div>प्राइवेसी पॉलिसी</div>
+    <div>डिस्क्लेमर</div>
+</div>
+
 <nav class="nav-bar">
-    <span class="nav-btn" onclick="showSection('home')">होम</span>
-    <span class="nav-btn" onclick="showSection('live')">लाइव</span>
-    <span class="nav-btn" onclick="showSection('cricket')">क्रिकेट</span>
+    <span>होम</span> <span>लाइव</span> <span>क्रिकेट</span>
 </nav>
 
-<div id="content-area">
-    <div id="posts-container"></div>
-</div>
+<div id="posts-container"></div>
 
 <div id="login-modal">
     <h3>लॉगिन करें</h3>
-    <p>लाइक और कमेंट करने के लिए कृपया गूगल से लॉगिन करें।</p>
     <button onclick="login()">Google से लॉगिन करें</button>
     <button onclick="document.getElementById('login-modal').style.display='none'">बंद करें</button>
 </div>
@@ -41,53 +36,43 @@
     import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
-        authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
-        projectId: "project-8621d575-e2f7-45a2-963",
-        storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
-        messagingSenderId: "756626829965",
-        appId: "1:756626829965:web:935e4dfabb4d52e211a8c4"
-    };
-
+    // अपनी Config यहाँ पेस्ट करें
+    const firebaseConfig = { /* ... */ };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
 
     window.login = () => {
-        signInWithPopup(auth, provider).then(() => {
-            alert("लॉगिन सफल!");
-            document.getElementById('login-modal').style.display = 'none';
-        });
+        signInWithPopup(auth, new GoogleAuthProvider()).then(() => alert("लॉगिन हो गया!"));
     };
 
-    window.showLogin = () => {
-        document.getElementById('login-modal').style.display = 'block';
-    };
-
-    const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
-    onSnapshot(q, (snapshot) => {
+    // पोस्ट रेंडर
+    onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot) => {
         let html = "";
         snapshot.forEach((doc) => {
             let p = doc.data();
             html += `
             <div class="post-card">
-                <img src="${p.thumb}" style="width:100%; height:250px; object-fit:cover;">
-                <h3 style="padding: 10px;">${p.title}</h3>
-                <div class="post-actions">
-                    <button class="action-btn" onclick="showLogin()">👍 Like</button>
-                    <button class="action-btn" onclick="showLogin()">👎 Dislike</button>
-                    <button class="action-btn" onclick="showLogin()">❤️ Love</button>
-                    <button class="action-btn" onclick="showLogin()">💬 Comment</button>
-                    <button class="action-btn">🔗 Share</button>
+                <h3>${p.title}</h3>
+                <img src="${p.thumb}" style="width:100%">
+                <div class="actions">
+                    <button class="btn" onclick="checkAuth()">👍 लाइक</button>
+                    <button class="btn" onclick="checkAuth()">👎 डिसलाइक</button>
+                    <button class="btn" onclick="checkAuth()">❤️ लव</button>
+                    <button class="btn" onclick="checkAuth()">💬 कमेंट</button>
+                    <button class="btn" onclick="share('${p.title}')">🔗 शेयर</button>
                 </div>
             </div>`;
         });
         document.getElementById('posts-container').innerHTML = html;
     });
-</script>
 
-</body>
-    </html>
+    window.checkAuth = () => {
+        if (!auth.currentUser) document.getElementById('login-modal').style.display = 'block';
+        else alert("एक्शन पूरा हुआ!");
+    };
     
+    window.share = (t) => navigator.share({title: t, url: window.location.href});
+</script>
+</body>
+</html>
