@@ -3,32 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViewsPlus.com</title>
+    <title>ViewsPlus.com | दुनिया की धड़कन</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .post-card { background: #fff; padding: 20px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .post-card img { width: 100%; border-radius: 8px; }
+        .login-btn { background: #4285F4; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-top">
-            <div class="logo-text">ViewsPlus.com</div>
-            <div class="three-dots">⋮</div>
-        </div>
-        
-        <div class="tagline">दुनिया की धड़कन</div>
-
-        <nav class="nav-bar">
-            <span class="nav-btn" onclick="showSection('home')">होम</span>
-            <span class="nav-btn" onclick="showSection('live')">लाइव</span>
-            <span class="nav-btn" onclick="showSection('cricket')">क्रिकेट</span>
-        </nav>
-    </header>
-
-    <div id="content-area">
-        <div id="posts-container"></div>
+<header>
+    <div class="header-top">
+        <div class="logo-text">ViewsPlus.com</div>
+        <button class="login-btn" onclick="login()">Google से लॉगिन करें</button>
     </div>
+</header>
 
-    <script type="module" src="js/firebase-config.js"></script>
-    <script type="module" src="js/app.js"></script>
-    <script type="module" src="js/live.js"></script>
+<div id="content-area">
+    <h2>लेटेस्ट पोस्ट</h2>
+    <div id="posts-container"></div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
+        authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
+        projectId: "project-8621d575-e2f7-45a2-963",
+        storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
+        messagingSenderId: "756626829965",
+        appId: "1:756626829965:web:935e4dfabb4d52e211a8c4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // लॉगिन फंक्शन
+    window.login = () => {
+        signInWithPopup(auth, provider).then(() => alert("लॉगिन सफल!"));
+    };
+
+    // पोस्ट लोड करने का फंक्शन
+    const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+        let html = "";
+        snapshot.forEach((doc) => {
+            let p = doc.data();
+            html += `<div class="post-card">
+                        <h3>${p.title}</h3>
+                        <img src="${p.thumb}">
+                        <div>${p.content}</div>
+                     </div>`;
+        });
+        document.getElementById('posts-container').innerHTML = html;
+    });
+</script>
+
 </body>
 </html>
