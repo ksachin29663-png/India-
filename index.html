@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachin News Hub</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
+        .post-card { background: white; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .live-score { background: #ff0000; color: white; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; }
+        button { cursor: pointer; padding: 8px 15px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>मेरी न्यूज़ वेबसाइट</h1>
+    </header>
+
+    <div id="live-score" class="live-score">
+        लाइव स्कोर: भारत 150/2 (20 ओवर)
+    </div>
+
+    <div id="posts-container">
+        <div class="post-card">
+            <h2>आज की ब्रेकिंग न्यूज़</h2>
+            <p>यहाँ आपकी न्यूज़ का कंटेंट आएगा...</p>
+            <button onclick="checkAuthAndLike()">❤️ लाइक करें</button>
+        </div>
+    </div>
+
+    <script>
+        // यहाँ Firebase का SDK जुड़ेगा ताकि हम डेटा फेच कर सकें
+        function checkAuthAndLike() {
+            const user = null; // यहाँ Firebase Auth चेक होगा
+            if (!user) {
+                alert("लाइक करने के लिए पहले लॉगिन करें!");
+                // यहाँ Google लॉगिन का फंक्शन कॉल होगा
+            } else {
+                console.log("लाइक सफल!");
+            }
+        }
+    </script>
+</body>
+</html>
+
