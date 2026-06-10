@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ViewsPlus.com</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        /* लेआउट को प्रोफेशनल बनाने के लिए */
-        nav { display: flex; justify-content: space-around; padding: 15px; border-bottom: 1px solid #ddd; }
-        .nav-btn { cursor: pointer; font-weight: bold; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; }
-        .three-dots { font-size: 24px; cursor: pointer; }
-    </style>
 </head>
 <body>
 
@@ -20,8 +13,7 @@
             <div class="logo-text">ViewsPlus.com</div>
             <div class="three-dots">⋮</div>
         </div>
-        <div style="text-align: center; font-size: 12px; margin-bottom: 10px;">दुनिया की धड़कन</div>
-        
+        <div class="tagline">दुनिया की धड़कन</div>
         <nav>
             <span class="nav-btn" onclick="showSection('home')">होम</span>
             <span class="nav-btn" onclick="showSection('live')">लाइव</span>
@@ -29,10 +21,22 @@
         </nav>
     </header>
 
-    <div id="content-area" style="padding: 10px;">
-        <div id="posts-container"></div>
+    <div id="content-area">
+        <div id="home-section"><div id="posts-container"></div></div>
+        <div id="live-section" style="display:none;"></div>
+        <div id="cricket-section" style="display:none;"><div id="live-score-container"></div></div>
     </div>
 
+    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/live.js"></script>
+
+    <script>
+        function showSection(section) {
+            document.getElementById('home-section').style.display = (section === 'home') ? 'block' : 'none';
+            document.getElementById('live-section').style.display = (section === 'live') ? 'block' : 'none';
+            document.getElementById('cricket-section').style.display = (section === 'cricket') ? 'block' : 'none';
+        }
+    </script>
 </body>
 </html>
