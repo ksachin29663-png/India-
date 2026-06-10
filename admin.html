@@ -2,18 +2,42 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>ViewsPlus - Admin Panel</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>प्रो एडमिन पैनल</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; }
+        .admin-box { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .stats { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .stat-card { background: #007bff; color: white; padding: 15px; border-radius: 5px; flex: 1; margin: 0 5px; text-align: center; }
+    </style>
 </head>
 <body>
-    <div class="post-card">
-        <h2>नई पोस्ट लिखें</h2>
-        <input type="text" id="postTitle" placeholder="टाइटल यहाँ लिखें" style="width:100%; padding:10px; margin-bottom:10px;">
-        <textarea id="postContent" placeholder="न्यूज़ का कंटेंट यहाँ लिखें..." style="width:100%; height:100px; margin-bottom:10px;"></textarea>
-        <button id="publishBtn" style="background:green; color:white; padding:10px; width:100%;">पब्लिश करें</button>
-    </div>
 
-    <script type="module" src="js/admin.js"></script>
+<div class="admin-box">
+    <h2>कंटेंट पोस्ट करें</h2>
+    <div class="stats">
+        <div class="stat-card">कुल पोस्ट: 0</div>
+        <div class="stat-card">आज की पोस्ट: 0</div>
+    </div>
+    
+    <input type="text" id="postTitle" placeholder="वीडियो का टाइटल">
+    <input type="text" id="videoUrl" placeholder="वीडियो का लिंक">
+    <input type="text" id="thumbUrl" placeholder="थंबनेल का लिंक">
+    <textarea id="description" rows="4" placeholder="वीडियो के बारे में लिखें..."></textarea>
+    
+    <button onclick="savePost()">डेटा सुरक्षित करें (Save to Firestore)</button>
+</div>
+
+<script>
+    // यहाँ अपना Firebase SDK कोड आएगा
+    function savePost() {
+        const title = document.getElementById('postTitle').value;
+        if(!title) { alert("टाइटल डालो भाई!"); return; }
+        // यहाँ Firestore का add() वाला कोड लगेगा
+        alert("डेटा गोदाम (Firestore) में भेजा जा रहा है...");
+    }
+</script>
 </body>
 </html>
-
