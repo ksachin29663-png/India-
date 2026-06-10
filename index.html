@@ -6,23 +6,34 @@
     <title>ViewsPlus.com | दुनिया की धड़कन</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .post-card { background: #fff; padding: 20px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .post-card img { width: 100%; border-radius: 8px; }
-        .login-btn { background: #4285F4; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        /* पॉपअप स्टाइल */
+        #login-modal { display:none; position:fixed; top:30%; left:10%; width:80%; background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px #000; z-index:1000; text-align:center; }
+        .post-actions { display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #ddd; }
+        .action-btn { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="header-top">
-        <div class="logo-text">ViewsPlus.com</div>
-        <button class="login-btn" onclick="login()">Google से लॉगिन करें</button>
-    </div>
+<header class="header-top">
+    <div class="logo-text">ViewsPlus.com</div>
+    <div class="three-dots">⋮</div>
 </header>
 
+<nav class="nav-bar">
+    <span class="nav-btn" onclick="showSection('home')">होम</span>
+    <span class="nav-btn" onclick="showSection('live')">लाइव</span>
+    <span class="nav-btn" onclick="showSection('cricket')">क्रिकेट</span>
+</nav>
+
 <div id="content-area">
-    <h2>लेटेस्ट पोस्ट</h2>
     <div id="posts-container"></div>
+</div>
+
+<div id="login-modal">
+    <h3>लॉगिन करें</h3>
+    <p>लाइक और कमेंट करने के लिए कृपया गूगल से लॉगिन करें।</p>
+    <button onclick="login()">Google से लॉगिन करें</button>
+    <button onclick="document.getElementById('login-modal').style.display='none'">बंद करें</button>
 </div>
 
 <script type="module">
@@ -44,26 +55,39 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // लॉगिन फंक्शन
     window.login = () => {
-        signInWithPopup(auth, provider).then(() => alert("लॉगिन सफल!"));
+        signInWithPopup(auth, provider).then(() => {
+            alert("लॉगिन सफल!");
+            document.getElementById('login-modal').style.display = 'none';
+        });
     };
 
-    // पोस्ट लोड करने का फंक्शन
+    window.showLogin = () => {
+        document.getElementById('login-modal').style.display = 'block';
+    };
+
     const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
     onSnapshot(q, (snapshot) => {
         let html = "";
         snapshot.forEach((doc) => {
             let p = doc.data();
-            html += `<div class="post-card">
-                        <h3>${p.title}</h3>
-                        <img src="${p.thumb}">
-                        <div>${p.content}</div>
-                     </div>`;
+            html += `
+            <div class="post-card">
+                <img src="${p.thumb}" style="width:100%; height:250px; object-fit:cover;">
+                <h3 style="padding: 10px;">${p.title}</h3>
+                <div class="post-actions">
+                    <button class="action-btn" onclick="showLogin()">👍 Like</button>
+                    <button class="action-btn" onclick="showLogin()">👎 Dislike</button>
+                    <button class="action-btn" onclick="showLogin()">❤️ Love</button>
+                    <button class="action-btn" onclick="showLogin()">💬 Comment</button>
+                    <button class="action-btn">🔗 Share</button>
+                </div>
+            </div>`;
         });
         document.getElementById('posts-container').innerHTML = html;
     });
 </script>
 
 </body>
-</html>
+    </html>
+    
