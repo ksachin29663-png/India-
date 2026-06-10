@@ -7,49 +7,17 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
     <header>
         <div class="logo-text">ViewsPlus.com</div>
         <div class="tagline">दुनिया की धड़कन - हर अपडेट यहाँ</div>
     </header>
-    <div class="post-card">
-        <h2>आज की ब्रेकिंग न्यूज़</h2>
-        <p>यहाँ आपकी न्यूज़ का कंटेंट आएगा...</p>
-        <button onclick="checkAuthAndLike()">❤️ लाइक करें</button>
-    </div>
-<
-        body { font-family: sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
-        .post-card { background: white; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .live-score { background: #ff0000; color: white; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; }
-        button { cursor: pointer; padding: 8px 15px; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>मेरी न्यूज़ वेबसाइट</h1>
-    </header>
 
-    <div id="live-score" class="live-score">
-        Live cricket score 🏏📈❔
-    </div>
-    <div id="posts-container">
-        <div class="post-card">
-            <h2>आज की ब्रेकिंग न्यूज़</h2>
-            <p>यहाँ आपकी न्यूज़ का कंटेंट आएगा...</p>
-            <button onclick="checkAuthAndLike()">❤️ लाइक करें</button>
-        </div>
-    </div>
+    <div id="live-score-container"></div>
+    <div id="posts-container"></div>
+
     <script>
-        // यहाँ Firebase का SDK जुड़ेगा ताकि हम डेटा फेच कर सकें
-        function checkAuthAndLike() {
-            const user = null; // यहाँ Firebase Auth चेक होगा
-            if (!user) {
-                alert("लाइक करने के लिए पहले लॉगिन करें!");
-                // यहाँ Google लॉगिन का फंक्शन कॉल होगा
-            } else {
-                console.log("लाइक सफल!");
-            }
-        }
+        // यहाँ हम बाद में Firebase का कोड डालेंगे जो अपने आप डेटा फेच करेगा
     </script>
 </body>
 </html>
-
