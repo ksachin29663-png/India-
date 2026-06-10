@@ -2,77 +2,29 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ViewsPlus.com</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header class="header">
-    <div class="logo"><b>ViewsPlus.com</b></div>
-    <div onclick="document.getElementById('menu').style.display='block'" style="cursor:pointer; font-size:24px;">⋮</div>
-</header>
+    <header class="header">
+        <div class="logo"><b>ViewsPlus.com</b></div>
+        <div onclick="toggleMenu()" style="cursor:pointer; font-size:24px;">⋮</div>
+    </header>
 
-<div id="menu" style="display:none; position:absolute; right:10px; background:white; padding:10px; border:1px solid #ccc;">
-    <div onclick="login()">Google लॉगिन</div>
-    <hr>
-    <div>प्राइवेसी पॉलिसी</div>
-    <div>डिस्क्लेमर</div>
-</div>
+    <div id="menu" style="display:none; position:absolute; right:10px; background:white; padding:15px; border:1px solid #ccc; z-index:1000;">
+        <div style="margin-bottom:10px;">प्राइवेसी पॉलिसी</div>
+        <div>डिस्क्लेमर</div>
+    </div>
 
-<nav class="nav-bar">
-    <span>होम</span> <span>लाइव</span> <span>क्रिकेट</span>
-</nav>
+    <nav class="nav-bar">
+        <span>होम</span> <span>लाइव</span> <span>क्रिकेट</span>
+    </nav>
 
-<div id="posts-container"></div>
+    <div id="posts-container"></div>
 
-<div id="login-modal">
-    <h3>लॉगिन करें</h3>
-    <button onclick="login()">Google से लॉगिन करें</button>
-    <button onclick="document.getElementById('login-modal').style.display='none'">बंद करें</button>
-</div>
+    <script type="module" src="js/app.js"></script>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-    // अपनी Config यहाँ पेस्ट करें
-    const firebaseConfig = { /* ... */ };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    window.login = () => {
-        signInWithPopup(auth, new GoogleAuthProvider()).then(() => alert("लॉगिन हो गया!"));
-    };
-
-    // पोस्ट रेंडर
-    onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot) => {
-        let html = "";
-        snapshot.forEach((doc) => {
-            let p = doc.data();
-            html += `
-            <div class="post-card">
-                <h3>${p.title}</h3>
-                <img src="${p.thumb}" style="width:100%">
-                <div class="actions">
-                    <button class="btn" onclick="checkAuth()">👍 लाइक</button>
-                    <button class="btn" onclick="checkAuth()">👎 डिसलाइक</button>
-                    <button class="btn" onclick="checkAuth()">❤️ लव</button>
-                    <button class="btn" onclick="checkAuth()">💬 कमेंट</button>
-                    <button class="btn" onclick="share('${p.title}')">🔗 शेयर</button>
-                </div>
-            </div>`;
-        });
-        document.getElementById('posts-container').innerHTML = html;
-    });
-
-    window.checkAuth = () => {
-        if (!auth.currentUser) document.getElementById('login-modal').style.display = 'block';
-        else alert("एक्शन पूरा हुआ!");
-    };
-    
-    window.share = (t) => navigator.share({title: t, url: window.location.href});
-</script>
 </body>
 </html>
