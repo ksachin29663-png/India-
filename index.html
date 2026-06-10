@@ -2,19 +2,39 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>ViewsPlus.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewsPlus.com - दुनिया की धड़कन</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
     <header>
         <div class="logo-text">ViewsPlus.com</div>
-        <div class="tagline">दुनिया की धड़कन - हर अपडेट यहाँ</div>
+        <div class="tagline">दुनिया की धड़कन</div>
+        <nav>
+            <button onclick="showSection('home')">होम</button>
+            <button onclick="showSection('live')">लाइव</button>
+            <button onclick="showSection('cricket')">क्रिकेट</button>
+        </nav>
     </header>
 
-    <div id="live-score-container"></div>
-    <div id="posts-container"></div>
+    <div id="content-area">
+        <div id="home-section"><h2>होम - ताज़ा ख़बरें</h2><div id="posts-container"></div></div>
+        <div id="live-section" style="display:none;"><h2>लाइव अपडेट्स</h2><div id="live-updates"></div></div>
+        <div id="cricket-section" style="display:none;"><h2>क्रिकेट स्कोर</h2><div id="live-score-container"></div></div>
+    </div>
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/live.js"></script>
+    
+    <script>
+        function showSection(section) {
+            document.getElementById('home-section').style.display = (section === 'home') ? 'block' : 'none';
+            document.getElementById('live-section').style.display = (section === 'live') ? 'block' : 'none';
+            document.getElementById('cricket-section').style.display = (section === 'cricket') ? 'block' : 'none';
+        }
+    </script>
 </body>
-</html>
+    </html>
+                                                          
