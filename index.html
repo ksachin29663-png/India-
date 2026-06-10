@@ -13,8 +13,10 @@
             <div class="logo-text">ViewsPlus.com</div>
             <div class="three-dots">⋮</div>
         </div>
+        
         <div class="tagline">दुनिया की धड़कन</div>
-        <nav>
+
+        <nav class="nav-bar">
             <span class="nav-btn" onclick="showSection('home')">होम</span>
             <span class="nav-btn" onclick="showSection('live')">लाइव</span>
             <span class="nav-btn" onclick="showSection('cricket')">क्रिकेट</span>
@@ -22,21 +24,11 @@
     </header>
 
     <div id="content-area">
-        <div id="home-section"><div id="posts-container"></div></div>
-        <div id="live-section" style="display:none;"></div>
-        <div id="cricket-section" style="display:none;"><div id="live-score-container"></div></div>
+        <div id="posts-container"></div>
     </div>
 
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/app.js"></script>
     <script type="module" src="js/live.js"></script>
-
-    <script>
-        function showSection(section) {
-            document.getElementById('home-section').style.display = (section === 'home') ? 'block' : 'none';
-            document.getElementById('live-section').style.display = (section === 'live') ? 'block' : 'none';
-            document.getElementById('cricket-section').style.display = (section === 'cricket') ? 'block' : 'none';
-        }
-    </script>
 </body>
 </html>
