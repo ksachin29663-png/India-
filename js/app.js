@@ -1,16 +1,18 @@
-// यह फंक्शन आपकी पोस्ट को स्क्रीन पर दिखाएगा
-function displayPosts(posts) {
+// Firestore से पोस्ट खींचने और दिखाने का फंक्शन
+db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
     const container = document.getElementById('posts-container');
-    container.innerHTML = ""; 
+    container.innerHTML = ""; // पुराना डेटा साफ़ करें
 
-    posts.forEach(post => {
+    snapshot.forEach((doc) => {
+        const post = doc.data();
         const div = document.createElement('div');
         div.className = 'post-card';
-        // यहाँ इमेज और टेक्स्ट का स्ट्रक्चर है
+        
+        // यहाँ पोस्ट का डेटा दिखाया जा रहा है
         div.innerHTML = `
             <div class="post-title">${post.title}</div>
             <div class="post-content">${post.content}</div>
         `;
         container.appendChild(div);
     });
-}
+});
