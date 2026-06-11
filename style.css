@@ -1,53 +1,24 @@
-body { 
-    font-family: sans-serif; 
-    margin: 0; 
-    background: #f4f4f4; 
-}
+body { margin: 0; padding: 0; font-family: sans-serif; background: #f4f4f4; color: #333; }
 
-/* हेडर: नीला बैकग्राउंड और लोगो किनारे पर */
-.header { 
-    background: #03a9f4; /* तुम्हारी फोटो जैसा नीला रंग */
-    padding: 15px 20px; 
-    display: flex; 
-    align-items: center; 
-    /* कोई 'थ्री-डॉट' नहीं है, इसलिए लोगो सीधे लेफ्ट में रहेगा */
-}
+/* हेडर */
+.header { background: #03a9f4; padding: 20px; text-align: center; color: white; font-size: 24px; font-weight: bold; }
 
-.logo { 
-    color: white; 
-    font-size: 24px; 
-    font-weight: bold; 
-}
+/* नेविगेशन */
+.nav-bar { background: white; padding: 10px; text-align: center; border-bottom: 2px solid #ddd; }
+.nav-bar a { margin: 0 10px; text-decoration: none; color: #333; font-weight: bold; font-size: 16px; }
 
-/* नेविगेशन बार की सेटिंग */
-.nav-bar { 
-    background: white; 
-    padding: 15px 20px; 
-    display: flex; 
-    gap: 25px; /* इससे मेनू दूर-दूर होंगे */
-    border-bottom: 2px solid #ddd;
-    overflow-x: auto; /* अगर मोबाइल छोटा है, तो मेनू स्क्रॉल हो जाएगा */
-}
+/* पोस्ट कार्ड स्टाइल */
+.post-card { background: white; margin: 15px; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-/* नेविगेशन के लिंक लाल रंग में */
-.nav-bar a { 
-    text-decoration: none; 
-    color: red; /* तुमने लाल रंग मांगा था */
-    font-weight: bold; 
-    font-size: 16px;
-    white-space: nowrap; /* मेनू के नाम टूट कर नीचे नहीं आएंगे */
-}
-
-.post-card { 
-    background: white; 
-    margin: 15px; 
-    padding: 15px; 
+/* इमेज को YouTube थंबनेल जैसा बनाना */
+.post-image { 
+    width: 100%; 
+    aspect-ratio: 16 / 9; 
+    object-fit: cover; 
     border-radius: 8px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    display: block; 
 }
 
-.actions { 
-    display: flex; 
-    justify-content: space-around; 
-    margin-top: 15px; 
-}
+/* कंटेंट स्टाइलिंग */
+.post-title { font-size: 22px; font-weight: 800; margin: 15px 0 10px 0; color: #000; }
+.post-content { font-size: 18px; line-height: 1.6; color: #444; }
