@@ -1,40 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>एडमिन पैनल</title>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-</head>
-<body>
-    <h2>पोस्ट डालें</h2>
-    <input type="text" id="title" placeholder="टाइटल">
-    <input type="text" id="thumb" placeholder="थंबनेल लिंक">
-    <div id="editor" style="height: 200px;"></div>
-    <button onclick="save()">पोस्ट पब्लिश करें</button>
+<div id="editor"></div>
+<button onclick="publishPost()">पोस्ट पब्लिश करें</button>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCglO0vHutINDOWaIWMsv4N9_54dpbPvIo",
-            authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
-            projectId: "project-8621d575-e2f7-45a2-963",
-            storageBucket: "project-8621d575-e2f7-45a2-963.firebasestorage.app",
-            messagingSenderId: "756626829965",
-            appId: "1:756626829965:web:935e4dfabb4d52e211a8c4"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        var quill = new Quill('#editor', { theme: 'snow' });
+<div id="admin-posts"></div>
 
-        function save() {
-            db.collection("posts").add({
-                title: document.getElementById('title').value,
-                thumb: document.getElementById('thumb').value,
-                content: quill.root.innerHTML,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => alert("पोस्ट लाइव हो गई!"));
-        }
-    </script>
-</body>
-</html>
+<script>
+// Quill Editor सेटअप (इमेज सपोर्ट के साथ)
+var quill = new Quill('#editor', {
+    modules: { toolbar: [['bold', 'italic', 'image']] }, // यहाँ 'image' जोड़ा है
+    theme: 'snow'
+});
+
+// पोस्ट डिलीट करने का फंक्शन
+window.deletePost = (id) => {
+    if(confirm("क्या आप ये पोस्ट हटाना चाहते हैं?")) {
+        deleteDoc(doc(db, "posts", id)).then(() => alert("पोस्ट हट गई!"));
+    }
+};
+
+// लॉगिन सिक्योरिटी (सिर्फ आपकी जीमेल के लिए)
+onAuthStateChanged(auth, (user) => {
+    if (user && user.email === "your-email@gmail.com") { // अपनी जीमेल यहाँ लिखें
+        console.log("Welcome Admin");
+    } else {
+        window.location.href = "index.html"; // बाहरी को बाहर निकालें
+    }
+});
+</script>
