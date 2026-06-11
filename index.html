@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViewsPlus.com</title>
+    <title>VishwaPulse.com | हर खबर आप तक</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <header class="header">
-        <div class="logo"><b>ViewsPlus.com</b></div>
-        <div onclick="toggleMenu()" style="cursor:pointer; font-size:24px;">⋮</div>
+        <div class="logo-area">
+            <img src="path/to/logo.png" alt="VishwaPulse Logo" class="site-logo">
+        </div>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </header>
 
-    <div id="menu" style="display:none; position:absolute; right:10px; background:white; padding:15px; border:1px solid #ccc; z-index:1000;">
-        <div style="margin-bottom:10px;">प्राइवेसी पॉलिसी</div>
-        <div>डिस्क्लेमर</div>
-    </div>
-
     <nav class="nav-bar">
-        <span>होम</span> <span>लाइव</span> <span>क्रिकेट</span>
+        <a href="#">होम</a>
+        <a href="#">देश</a>
+        <a href="#">दुनिया</a>
+        <a href="#">क्रिकेट</a>
+        <a href="#">लाइव</a>
     </nav>
 
-    <div id="posts-container"></div>
+    <main id="posts-container"></main>
 
     <script type="module" src="js/app.js"></script>
-
 </body>
 </html>
