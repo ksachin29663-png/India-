@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>पोस्ट प्रबंधन (Admin Only)</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <h2 id="msg">कृपया प्रतीक्षा करें...</h2>
+    <div id="posts-list"></div>
+
+    <script>
+        const firebaseConfig = { /* वही अपना कॉन्फ़िग यहाँ डालें */ };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // अपनी ईमेल यहाँ डालें (सुरक्षा के लिए)
+        const MY_EMAIL = "ksachin29663@gmail.com"; 
+
+        // यहाँ चेक हो रहा है कि आप एडमिन हैं या नहीं
+        const userEmail = prompt("अपनी ईमेल आईडी दर्ज करें:");
+        
+        if (userEmail === MY_EMAIL) {
+            document.getElementById('msg').innerText = "सचिन भाई, आपका स्वागत है!";
+            loadPosts();
+        } else {
+            document.getElementById('msg').innerText = "आप एडमिन नहीं हैं!";
+        }
+
+        function loadPosts() {
+            db.collection("posts").orderBy("timestamp", "desc").onSnapshot(snap => {
+                let list = document.getElementById('posts-list');
+                list.innerHTML = "";
+                snap.forEach(doc => {
+                    let p = document.createElement('div');
+                    p.innerHTML = `<p>${doc.data().title} 
+                    <button onclick="deletePost('${doc.id}')" style="color:red;">डिलीट करें</button></p>`;
+                    list.appendChild(p);
+                });
+            });
+        }
+
+        function deletePost(id) {
+            if(confirm("पक्का डिलीट करना है?")) {
+                db.collection("posts").doc(id).delete().then(() => alert("पोस्ट हटा दी गई!"));
+            }
+        }
+    </script>
+</body>
+</html>
