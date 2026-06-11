@@ -75,8 +75,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
         }
-        /* मैनेज पोस्ट्स सेक्शन */
         .manage-section {
             margin-top: 40px;
             border-top: 2px solid #ddd;
@@ -106,6 +106,7 @@
 
     <div id="auth-container">
         <h2>एडमिन लॉगिन की आवश्यकता है</h2>
+        <p style="color: #666;">कृपया आगे बढ़ने के लिए अपने Google खाते से सत्यापन करें</p>
         <button class="btn-login" onclick="login()">Google से लॉगिन करें</button>
     </div>
 
@@ -137,7 +138,7 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <script>
-        // आपके Firebase का कॉन्फ़िगरेशन
+        // आपका Firebase कॉन्फ़िगरेशन
         const firebaseConfig = {
             apiKey: "AIzaSyCg1OUvIut1NJOMaHhMsvN0_54dpbPIo*", 
             authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
@@ -152,57 +153,72 @@
         const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // Quill Rich Text Editor कॉन्फ़िगरेशन (इमेज और कलर फ़ॉर्मेटिंग टूल के साथ)
+        // Quill Rich Text Editor कॉन्फ़िगरेशन
         var quill = new Quill('#editor-container', {
             modules: {
                 toolbar: [
                     [{ 'header': [1, 2, false] }],
                     ['bold', 'italic', 'underline'],
-                    [{ 'color': [] }, { 'background': [] }], // टेक्स्ट कलर हाइलाइट के लिए
-                    ['image', 'link'],                      // टेक्स्ट के बीच फोटो लगाने के लिए
+                    [{ 'color': [] }, { 'background': [] }], 
+                    ['image', 'link'],                      
                     ['clean']
                 ]
             },
             theme: 'snow'
         });
 
-        // 1.Persistent Auth: एक बार लॉगिन होने पर हमेशा लॉगिन रखने का सिस्टम
-        auth.onAuthStateChanged((user) => {
-            // यहाँ "your-email@gmail.com" की जगह अपनी असली Gmail ID डालें
-            const adminEmail = "ksachin29663@gmail.com; 
+        // ** लाइन 172: यहाँ अपनी सही ईमेल आईडी डालें **
+        const adminEmail = "ksachin29663@gmail.com; 
 
-            if (user && user.email === adminEmail) {
-                // अगर सही एडमिन लॉगिन है तो पैनल दिखाएं
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                loadAdminPosts(); // पोस्ट्स लोड करें जिन्हें डिलीट किया जा सके
-            } else if (user && user.email !== adminEmail) {
-                alert("अनाधिकृत एक्सेस! सिर्फ मुख्य एडमिन ही लॉग इन कर सकता है।");
-                auth.signOut();
+        // रीडायरेक्ट लॉगिन का रिजल्ट चेक करने के लिए (यह मोबाइल पर सबसे जरूरी है)
+        auth.getRedirectResult().then((result) => {
+            if (result.user) {
+                checkUser(result.user);
+            }
+        }).catch((error) => {
+            console.error("Redirect Auth Error: ", error);
+        });
+
+        // लॉगिन और सिक्योरिटी चेक करने का मुख्य फंक्शन
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                checkUser(user);
             } else {
-                // अगर लॉगिन नहीं है तो सिर्फ लॉगिन स्क्रीन दिखेगी
                 document.getElementById('auth-container').style.display = 'block';
                 document.getElementById('admin-panel').style.display = 'none';
             }
         });
 
-        // लॉगिन फंक्शन
+        function checkUser(user) {
+            if (user.email === adminEmail) {
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadAdminPosts(); 
+            } else {
+                alert("अनाधिकृत एक्सेस! सिर्फ मुख्य एडमिन ही लॉग इन कर सकता है।");
+                auth.signOut();
+            }
+        }
+
+        // लॉगिन फंक्शन (मोबाइल के लिए Redirect का उपयोग किया गया है ताकि पॉप-अप ब्लॉक न हो)
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            // local persistence सेट कर रहे हैं ताकि ब्राउज़र बंद होने पर भी लॉगिन न छूटे
+            
+            // लोकल परसिस्टेंस सेट करना ताकि बार-बार लॉगिन न करना पड़े
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
                 .then(() => {
-                    return auth.signInWithPopup(provider);
+                    // signInWithRedirect मोबाइल ब्राउज़र्स पर 100% काम करता है
+                    return auth.signInWithRedirect(provider);
                 })
                 .catch((error) => {
-                    alert("लॉगिन में त्रुटि: " + error.message);
+                    alert("लॉगिन कॉन्फ़िगरेशन त्रुटि: " + error.message);
                 });
         }
 
-        // 2. पोस्ट पब्लिश करने का फंक्शन (टेक्स्ट और तस्वीरें दोनों डेटाबेस में जाएंगी)
+        // पोस्ट पब्लिश करने का फंक्शन
         function publishPost() {
             const title = document.getElementById('post-title').value;
-            const contentHtml = quill.root.innerHTML; // Quill एडिटर का पूरा HTML कंटेंट (टेक्स्ट + इमेजेस)
+            const contentHtml = quill.root.innerHTML; 
 
             if (!title || quill.getText().trim().length === 0) {
                 alert("कृपया शीर्षक और न्यूज़ कंटेंट दोनों भरें!");
@@ -211,20 +227,20 @@
 
             db.collection("posts").add({
                 title: title,
-                content: contentHtml, // एडिटर से सीधा फोटो और टेक्स्ट फॉर्मेट सुरक्षित रहेगा
+                content: contentHtml, 
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then(() => {
-                alert("न्यूज़ सफलतापूर्व पब्लिश हो गई!");
+                alert("न्यूज़ सफलतापूर्व पब्लिश हो गई👍!");
                 document.getElementById('post-title').value = "";
-                quill.setContents([]); // एडिटर साफ़ करें
+                quill.setContents([]); 
             })
             .catch((error) => {
                 alert("पब्लिश करने में समस्या आई: " + error.message);
             });
         }
 
-        // 3. एडमिन पैनल में डिलीट करने के लिए पोस्ट्स लोड करना
+        // एडमिन पैनल में डिलीट करने के लिए पोस्ट्स लोड करना
         function loadAdminPosts() {
             db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
                 let html = "";
@@ -241,12 +257,12 @@
             });
         }
 
-        // 4. गलत पोस्ट को हटाने का फंक्शन
+        // गलत पोस्ट को हटाने का फंक्शन
         window.deletePost = function(id) {
             if (confirm("क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?")) {
                 db.collection("posts").doc(id).delete()
                 .then(() => {
-                    alert("पोस्ट सफलतापूर्वक हटा दी गई है।");
+                    alert("POST सफलतापूर्व हटा दी गई है।");
                 })
                 .catch((error) => {
                     alert("हटाने में त्रुटि: " + error.message);
