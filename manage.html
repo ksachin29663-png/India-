@@ -2,31 +2,38 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>पोस्ट प्रबंधन (Admin Only)</title>
+    <title>एडमिन पैनल</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <h2 id="msg">कृपया प्रतीक्षा करें...</h2>
+    <h2 id="msg">चेकिंग...</h2>
     <div id="posts-list"></div>
 
     <script>
-        const firebaseConfig = { /* वही अपना कॉन्फ़िग यहाँ डालें */ };
+        // अपना कॉन्फ़िग यहाँ जरूर डालें
+        const firebaseConfig = {
+            apiKey: "AIzaSyCg1OUvIut1NJOMaHhMsvN0_54dpbPIo*",
+            authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
+            projectId: "project-8621d575-e2f7-45a2-963",
+            storageBucket: "project-8621d575-e2f7-45a2-963.appspot.com",
+            messagingSenderId: "751621829065",
+            appId: "1:751621829065:web:935e4dfbbb4d52e211z8c4"
+        };
+        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // अपनी ईमेल यहाँ डालें (सुरक्षा के लिए)
-        const MY_EMAIL = "ksachin29663@gmail.com"; 
-
-        // यहाँ चेक हो रहा है कि आप एडमिन हैं या नहीं
-        const userEmail = prompt("अपनी ईमेल आईडी दर्ज करें:");
-        
-        if (userEmail === MY_EMAIL) {
-            document.getElementById('msg').innerText = "सचिन भाई, आपका स्वागत है!";
-            loadPosts();
-        } else {
-            document.getElementById('msg').innerText = "आप एडमिन नहीं हैं!";
-        }
+        // पेज लोड होते ही ईमेल मांगें
+        window.onload = function() {
+            const userEmail = prompt("अपनी ईमेल आईडी दर्ज करें:");
+            if (userEmail === "ksachin29663@gmail.com") {
+                document.getElementById('msg').innerText = "सचिन भाई, आपका स्वागत है!";
+                loadPosts();
+            } else {
+                document.getElementById('msg').innerText = "एक्सेस नहीं मिला!";
+            }
+        };
 
         function loadPosts() {
             db.collection("posts").orderBy("timestamp", "desc").onSnapshot(snap => {
@@ -34,7 +41,7 @@
                 list.innerHTML = "";
                 snap.forEach(doc => {
                     let p = document.createElement('div');
-                    p.innerHTML = `<p>${doc.data().title} 
+                    p.innerHTML = `<hr><p>${doc.data().title} 
                     <button onclick="deletePost('${doc.id}')" style="color:red;">डिलीट करें</button></p>`;
                     list.appendChild(p);
                 });
