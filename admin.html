@@ -2,273 +2,93 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VishwaPulse Admin Panel</title>
-    
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-        }
-        .admin-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #03a9f4;
-            padding-bottom: 10px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #555;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-        #editor-container {
-            height: 350px;
-            background: white;
-            margin-bottom: 20px;
-        }
-        .btn-publish {
-            background-color: #03a9f4;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-publish:hover {
-            background-color: #0288d1;
-        }
-        #auth-container {
-            text-align: center;
-            margin-top: 100px;
-        }
-        .btn-login {
-            background-color: #4285F4;
-            color: white;
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .manage-section {
-            margin-top: 40px;
-            border-top: 2px solid #ddd;
-            padding-top: 20px;
-        }
-        .post-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 5px solid #ff5722;
-            border-radius: 4px;
-        }
-        .btn-delete {
-            background: #ff5722;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        #editor { height: 300px; margin-bottom: 20px; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; }
     </style>
 </head>
 <body>
 
-    <div id="auth-container">
-        <h2>एडमिन लॉगिन की आवश्यकता है</h2>
-        <p style="color: #666;">कृपया आगे बढ़ने के लिए अपने Google खाते से सत्यापन करें</p>
-        <button class="btn-login" onclick="login()">Google से लॉगिन करें</button>
+<div class="container">
+    <div id="login-box">
+        <h2>एडमिन लॉगिन</h2>
+        <button onclick="login()">Google से लॉगिन करें</button>
     </div>
 
-    <div id="admin-panel" class="admin-container" style="display: none;">
-        <h2>नया न्यूज़ पोस्ट जोड़ें</h2>
-        
-        <div class="input-group">
-            <label for="post-title">न्यूज़ का शीर्षक (Title)</label>
-            <input type="text" id="post-title" placeholder="यहाँ मुख्य हेडलाइन लिखें...">
-        </div>
-
-        <div class="input-group">
-            <label>न्यूज़ कंटेंट (टेक्स्ट और इमेज यहाँ जोड़ें)</label>
-            <div id="editor-container"></div>
-        </div>
-
-        <button class="btn-publish" onclick="publishPost()">पोस्ट पब्लिश करें</button>
-
-        <div class="manage-section">
-            <h3>पुरानी पोस्ट्स प्रबंधित करें (गलत पोस्ट यहाँ से हटाएं)</h3>
-            <div id="admin-posts-list"></div>
-        </div>
+    <div id="admin-box" style="display:none;">
+        <h2>खबर लिखें (VishwaPulse)</h2>
+        <input type="text" id="title" placeholder="न्यूज़ हेडलाइन...">
+        <div id="editor"></div>
+        <button onclick="publish()">पब्लिश करें</button>
+        <hr>
+        <h3>पुरानी पोस्ट्स</h3>
+        <div id="posts"></div>
     </div>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-    <script>
-        // आपका Firebase कॉन्फ़िगरेशन
-        const firebaseConfig = {
-            apiKey: "AIzaSyCg1OUvIut1NJOMaHhMsvN0_54dpbPIo*", 
-            authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
-            projectId: "project-8621d575-e2f7-45a2-963",
-            storageBucket: "project-8621d575-e2f7-45a2-963.appspot.com",
-            messagingSenderId: "751621829065",
-            appId: "1:751621829065:web:935e4dfbbb4d52e211z8c4"
-        };
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCg1OUvIut1NJOMaHhMsvN0_54dpbPIo*", 
+        authDomain: "project-8621d575-e2f7-45a2-963.firebaseapp.com",
+        projectId: "project-8621d575-e2f7-45a2-963",
+        storageBucket: "project-8621d575-e2f7-45a2-963.appspot.com",
+        messagingSenderId: "751621829065",
+        appId: "1:751621829065:web:935e4dfbbb4d52e211z8c4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-        // Firebase इनिशियलाइज़ेशन
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+    // एडिटर सेटअप
+    var quill = new Quill('#editor', { theme: 'snow', modules: { toolbar: [['bold', 'italic', 'image', { 'color': [] }]] } });
 
-        // Quill Rich Text Editor कॉन्फ़िगरेशन
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline'],
-                    [{ 'color': [] }, { 'background': [] }], 
-                    ['image', 'link'],                      
-                    ['clean']
-                ]
-            },
-            theme: 'snow'
+    // लॉगिन फंक्शन (Redirect)
+    function login() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => auth.signInWithRedirect(provider));
+    }
+
+    auth.getRedirectResult().then(res => { if(res.user) checkAdmin(res.user); });
+    auth.onAuthStateChanged(user => { if(user) checkAdmin(user); });
+
+    function checkAdmin(user) {
+        if(user.email === "ksachin29663@gmail.com") {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('admin-box').style.display = 'block';
+            loadPosts();
+        } else {
+            alert("आप एडमिन नहीं हैं!");
+            auth.signOut();
+        }
+    }
+
+    function publish() {
+        db.collection("posts").add({
+            title: document.getElementById('title').value,
+            content: quill.root.innerHTML,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => alert("पब्लिश हो गया!"));
+    }
+
+    function loadPosts() {
+        db.collection("posts").onSnapshot(snap => {
+            let html = "";
+            snap.forEach(doc => html += `<div>${doc.data().title} <button onclick="del('${doc.id}')">Delete</button></div>`);
+            document.getElementById('posts').innerHTML = html;
         });
+    }
 
-        // ** लाइन 172: यहाँ अपनी सही ईमेल आईडी डालें **
-        const adminEmail = "ksachin29663@gmail.com; 
-
-        // रीडायरेक्ट लॉगिन का रिजल्ट चेक करने के लिए (यह मोबाइल पर सबसे जरूरी है)
-        auth.getRedirectResult().then((result) => {
-            if (result.user) {
-                checkUser(result.user);
-            }
-        }).catch((error) => {
-            console.error("Redirect Auth Error: ", error);
-        });
-
-        // लॉगिन और सिक्योरिटी चेक करने का मुख्य फंक्शन
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                checkUser(user);
-            } else {
-                document.getElementById('auth-container').style.display = 'block';
-                document.getElementById('admin-panel').style.display = 'none';
-            }
-        });
-
-        function checkUser(user) {
-            if (user.email === adminEmail) {
-                document.getElementById('auth-container').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                loadAdminPosts(); 
-            } else {
-                alert("अनाधिकृत एक्सेस! सिर्फ मुख्य एडमिन ही लॉग इन कर सकता है।");
-                auth.signOut();
-            }
-        }
-
-        // लॉगिन फंक्शन (मोबाइल के लिए Redirect का उपयोग किया गया है ताकि पॉप-अप ब्लॉक न हो)
-        function login() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            
-            // लोकल परसिस्टेंस सेट करना ताकि बार-बार लॉगिन न करना पड़े
-            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-                .then(() => {
-                    // signInWithRedirect मोबाइल ब्राउज़र्स पर 100% काम करता है
-                    return auth.signInWithRedirect(provider);
-                })
-                .catch((error) => {
-                    alert("लॉगिन कॉन्फ़िगरेशन त्रुटि: " + error.message);
-                });
-        }
-
-        // पोस्ट पब्लिश करने का फंक्शन
-        function publishPost() {
-            const title = document.getElementById('post-title').value;
-            const contentHtml = quill.root.innerHTML; 
-
-            if (!title || quill.getText().trim().length === 0) {
-                alert("कृपया शीर्षक और न्यूज़ कंटेंट दोनों भरें!");
-                return;
-            }
-
-            db.collection("posts").add({
-                title: title,
-                content: contentHtml, 
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                alert("न्यूज़ सफलतापूर्व पब्लिश हो गई👍!");
-                document.getElementById('post-title').value = "";
-                quill.setContents([]); 
-            })
-            .catch((error) => {
-                alert("पब्लिश करने में समस्या आई: " + error.message);
-            });
-        }
-
-        // एडमिन पैनल में डिलीट करने के लिए पोस्ट्स लोड करना
-        function loadAdminPosts() {
-            db.collection("posts").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-                let html = "";
-                snapshot.forEach((doc) => {
-                    const post = doc.data();
-                    html += `
-                        <div class="post-item">
-                            <span><strong>${post.title}</strong></span>
-                            <button class="btn-delete" onclick="deletePost('${doc.id}')">हटाएं (Delete)</button>
-                        </div>
-                    `;
-                });
-                document.getElementById('admin-posts-list').innerHTML = html;
-            });
-        }
-
-        // गलत पोस्ट को हटाने का फंक्शन
-        window.deletePost = function(id) {
-            if (confirm("क्या आप वाकई इस पोस्ट को हटाना चाहते हैं?")) {
-                db.collection("posts").doc(id).delete()
-                .then(() => {
-                    alert("POST सफलतापूर्व हटा दी गई है।");
-                })
-                .catch((error) => {
-                    alert("हटाने में त्रुटि: " + error.message);
-                });
-            }
-        }
-    </script>
+    function del(id) { db.collection("posts").doc(id).delete(); }
+</script>
 </body>
 </html>
