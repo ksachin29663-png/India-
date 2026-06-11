@@ -1,24 +1,31 @@
-body { margin: 0; padding: 0; font-family: sans-serif; background: #f4f4f4; color: #333; }
+/* बेसिक सेटअप */
+body { margin: 0; padding: 0; font-family: 'Arial', sans-serif; background: #f0f2f5; color: #333; }
 
-/* हेडर */
-.header { background: #03a9f4; padding: 20px; text-align: center; color: white; font-size: 24px; font-weight: bold; }
+/* हेडर और नेविगेशन */
+.header { background: #03a9f4; padding: 15px; text-align: center; color: white; font-weight: bold; font-size: 20px; }
+.nav-bar { background: #fff; padding: 10px; display: flex; justify-content: center; gap: 15px; border-bottom: 1px solid #ddd; }
+.nav-bar a { text-decoration: none; color: #333; font-weight: bold; font-size: 14px; }
 
-/* नेविगेशन */
-.nav-bar { background: white; padding: 10px; text-align: center; border-bottom: 2px solid #ddd; }
-.nav-bar a { margin: 0 10px; text-decoration: none; color: #333; font-weight: bold; font-size: 16px; }
-
-/* पोस्ट कार्ड स्टाइल */
-.post-card { background: white; margin: 15px; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
-/* इमेज को YouTube थंबनेल जैसा बनाना */
-.post-image { 
-    width: 100%; 
-    aspect-ratio: 16 / 9; 
-    object-fit: cover; 
+/* सबसे जरूरी: न्यूज़ कार्ड का फिक्स्ड साइज */
+.post-card { 
+    background: #fff; 
+    margin: 10px auto; 
+    padding: 12px; 
     border-radius: 8px; 
-    display: block; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+    max-width: 500px; /* इससे वेबसाइट लंबी नहीं फैलेगी */
 }
 
-/* कंटेंट स्टाइलिंग */
-.post-title { font-size: 22px; font-weight: 800; margin: 15px 0 10px 0; color: #000; }
-.post-content { font-size: 18px; line-height: 1.6; color: #444; }
+/* इमेज को थंबनेल बनाना */
+.post-card img { 
+    width: 100%; 
+    height: 180px; /* फिक्स्ड हाइट */
+    object-fit: cover; /* फोटो कटेगी नहीं, फिट होगी */
+    border-radius: 6px; 
+    display: block; 
+    margin-bottom: 10px;
+}
+
+/* टेक्स्ट की सेटिंग */
+.post-title { font-size: 18px; font-weight: 800; color: #000; margin-bottom: 8px; line-height: 1.3; }
+.post-content { font-size: 15px; line-height: 1.5; color: #444; }
