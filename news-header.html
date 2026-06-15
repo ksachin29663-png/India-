@@ -1,0 +1,153 @@
+<!-- ==========================================
+     NEWS WEBSITE HEADER (HTML + CSS IN ONE FILE)
+     ========================================== -->
+<style>
+    /* पूरे हेडर का मुख्य स्टाइल */
+    .news-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* लोगो और विज्ञापन/तारीख को अलग करने के लिए */
+        padding: 20px 5%;
+        background-color: #1a1a1a; /* डार्क थीम न्यूज़ वेबसाइट लुक */
+        color: #ffffff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        border-bottom: 4px solid #ce1c1c; /* न्यूज़ वेबसाइट्स का सिग्नेचर रेड बॉर्डर */
+    }
+
+    /* लोगो और टेक्स्ट को एक साथ रखने वाला कंटेनर */
+    .brand-container {
+        display: flex;
+        align-items: center;
+        gap: 20px; /* लोगो और टेक्स्ट के बीच की दूरी */
+    }
+
+    /* न्यूज़ लोगो की स्टाइलिंग */
+    .news-logo-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ce1c1c; /* लाल रंग का बोल्ड बैकग्राउंड */
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+    }
+
+    .news-logo-box:hover {
+        transform: scale(1.05); /* माउस ले जाने पर थोड़ा बड़ा होगा */
+    }
+
+    .news-logo-box img {
+        width: 65px; /* न्यूज़ लोगो का परफेक्ट साइज */
+        height: auto;
+        display: block;
+    }
+
+    /* नाम और डिस्क्रिप्शन (विवरण) का बॉक्स */
+    .brand-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* मुख्य न्यूज़ वेबसाइट का नाम */
+    .news-title {
+        font-size: 32px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0;
+        color: #ffffff;
+    }
+
+    .news-title span {
+        color: #ce1c1c; /* नाम का आधा हिस्सा लाल रंग में (जैसे: दैनिक भास्कर, आजतक स्टाइल) */
+    }
+
+    /* वेबसाइट का विवरण / टैगलाइन */
+    .news-description {
+        font-size: 14px;
+        color: #b3b3b3;
+        margin: 5px 0 0 0;
+        font-style: italic;
+        letter-spacing: 0.5px;
+        border-left: 3px solid #ce1c1c;
+        padding-left: 8px;
+    }
+
+    /* राइट साइड में लाइव अपडेट या तारीख दिखाने के लिए (न्यूज़ फील देने के लिए) */
+    .header-right {
+        text-align: right;
+        font-size: 13px;
+        color: #a0a0a0;
+    }
+
+    .live-badge {
+        background-color: #ce1c1c;
+        color: white;
+        padding: 3px 8px;
+        font-weight: bold;
+        border-radius: 3px;
+        font-size: 11px;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 5px;
+        animation: blink 1.5s infinite; /* ब्लिंक करने वाला लाइव इफेक्ट */
+    }
+
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0.4; }
+        100% { opacity: 1; }
+    }
+
+    /* मोबाइल स्क्रीन के लिए डिजाइन को सही करना */
+    @media (max-width: 768px) {
+        .news-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        .brand-container {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .brand-text {
+            align-items: center;
+        }
+        .header-right {
+            text-align: center;
+        }
+        .news-description {
+            border-left: none;
+            padding-left: 0;
+        }
+    }
+</style>
+
+<!-- ==========================================
+     HTML कोड (न्यूज़ हेडर स्ट्रक्चर)
+     ========================================== -->
+<header class="news-header">
+    
+    <!-- लेफ्ट साइड: लोगो और विवरण -->
+    <div class="brand-container">
+        <!-- रैंडम न्यूज़ लोगो (यहाँ मैंने एक ग्लोब/न्यूज़ आइकॉन की इमेज यूज़ की है) -->
+        <a href="index.html" class="news-logo-box">
+            <img src="https://cdn-icons-png.flaticon.com/512/2965/2965335.png" alt="भारत न्यूज़ लोगो">
+        </a>
+        
+        <!-- वेबसाइट का नाम और टैगलाइन -->
+        <div class="brand-text">
+            <h1 class="news-title">भारत<span>न्यूज़ २४</span></h1>
+            <p class="news-description">निष्पक्ष आवाज़, हर पल की सटीक और सबसे तेज़ ख़बरें।</p>
+        </div>
+    </div>
+
+    <!-- राइट साइड: लाइव बैच और तारीख -->
+    <div class="header-right">
+        <span class="live-badge">● LIVE</span>
+        <div>देश और दुनिया की बड़ी ख़बरें</div>
+    </div>
+
+  </header>
+
