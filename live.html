@@ -45,7 +45,7 @@
 
     <script>
         const SHEET_ID = '1XAU85TH4lkw03uetVfDW-bv6t3qtdcBvdD6pzgpmcgo'; 
-        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:json';
 
         async function fetchLiveScore() {
             try {
@@ -60,7 +60,7 @@
                 const status = row[3] ? row[3].v : '';
                 const commentary = row[4] ? row[4].v : '';
 
-                document.getElementById('score-display').innerHTML = `${runs} / ${wickets} <span style="font-size: 15px; font-weight: normal;">(${overs} Over)</span>`;
+                document.getElementById('score-display').innerHTML = runs + ' / ' + wickets + ' <span style="font-size: 15px; font-weight: normal;">(' + overs + ' Over)</span>';
                 document.getElementById('status-display').innerText = status;
                 document.getElementById('commentary-display').innerHTML = commentary.replace(/\n/g, '<br>');
             } catch (error) {
